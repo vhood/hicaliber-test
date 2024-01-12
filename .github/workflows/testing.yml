@@ -25,11 +25,11 @@ jobs:
         php-version: 8.3
         coverage: none
 
-    - name: generate app key
-      run: php artisan key:generate
-
     - name: composer install
       run: composer install
+
+    - name: generate app key
+      run: php artisan key:generate
 
     - name: editorconfig-checker
       run: vendor/bin/ec -verbose
