@@ -9,7 +9,8 @@
     "vendor/",
     "node_modules/",
     "\\.idea/",
-    "\\.vscode/"
+    "\\.vscode/",
+    "seeders/data/.*\\.csv"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],
