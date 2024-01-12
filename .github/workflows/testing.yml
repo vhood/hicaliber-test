@@ -29,4 +29,4 @@ jobs:
       run: vendor/bin/phpstan analyze -c phpstan.neon
 
     - name: phpunit
-      run: vendor/bin/phpunit
+      run: php artisan key:generate && vendor/bin/phpunit
