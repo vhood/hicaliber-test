@@ -1,5 +1,7 @@
 # Laravel+Vue developer test
 
+[![status](https://img.shields.io/github/actions/workflow/status/vhood/hicaliber-test/testing.yml)](https://github.com/vhood/hicaliber-test/actions/workflows/testing.yml)
+
 ## The task
 
 You can read the task [here](/task.pdf).
