@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [PropertyController::class, 'index']);
+Route::match(['GET', 'POST'], '/', [PropertyController::class, 'index']);
