@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\Properties;
 
-// use App\Domain\Properties\Property;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -28,28 +26,31 @@ class PropertyRepository
     }
 
     /**
-     * @param Request $request
+     * @param PropertiesRequest $request
      * @return Collection<int,Property>
      *
      * @throws InvalidArgumentException
      */
-    public function propertiesForRequest(Request $request): Collection
+    public function propertiesForRequest(PropertiesRequest $request): Collection
     {
         $query = $this->db
             ::table('properties')
             ->select(['name', 'price', 'bedrooms', 'bathrooms', 'storeys', 'garages']);
 
         if ($request->has('filters.name')) {
-            $query->where('name', 'like', sprintf('%%%s%%', $request->input('filters.name')));
+            /** @var string */
+            $name = $request->validated('filters.name');
+
+            $query->where('name', 'like', sprintf('%%%s%%', $name));
         }
 
         if ($request->has('filters.price_min') && $request->has('filters.price_max')) {
-            $query->whereBetween('price', [$request->input('filters.price_min'), $request->input('filters.price_max')]);
+            $query->whereBetween('price', [$request->validated('filters.price_min'), $request->validated('filters.price_max')]);
         }
 
         foreach (['bedrooms', 'bathrooms', 'storeys', 'garages'] as $filter) {
             if ($request->has(sprintf('filters.%s', $filter))) {
-                $query->where($filter, '=', $request->input(sprintf('filters.%s', $filter)));
+                $query->where($filter, '=', $request->validated(sprintf('filters.%s', $filter)));
             }
         }
 

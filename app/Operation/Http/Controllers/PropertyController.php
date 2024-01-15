@@ -2,10 +2,11 @@
 
 namespace App\Operation\Http\Controllers;
 
+use App\Domain\Properties\PropertiesRequest;
 use App\Domain\Properties\PropertyRepository;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use InvalidArgumentException;
 
 class PropertyController extends Controller
 {
@@ -14,10 +15,12 @@ class PropertyController extends Controller
     ) { }
 
     /**
-     * @param Request $request
+     * @param PropertiesRequest $request
      * @return Response
+     *
+     * @throws InvalidArgumentException
      */
-    public function index(Request $request): Response
+    public function index(PropertiesRequest $request): Response
     {
         $properties = $request->has('filters')
             ? $this->repository->propertiesForRequest($request)
