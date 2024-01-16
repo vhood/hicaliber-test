@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      pgsql:
+      postgres:
         image: postgres
         env:
           POSTGRES_USER: sail
@@ -48,4 +48,4 @@ jobs:
       run: vendor/bin/phpstan analyze -c phpstan.neon
 
     - name: phpunit
-      run: vendor/bin/phpunit
+      run:  sed -i "s/DB_HOST=.*/DB_HOST=localhost/" .env && vendor/bin/phpunit
