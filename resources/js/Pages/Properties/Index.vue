@@ -12,7 +12,7 @@
 
         <ElDivider />
 
-        <DataTable />
+        <DataTable :properties="properties" />
       </ElMain>
     </ElContainer>
   </div>
@@ -24,5 +24,5 @@ import { ElContainer, ElDivider, ElHeader, ElMain } from 'element-plus';
 import FiltersForm from './Filters/FiltersForm.vue';
 import DataTable from './Data/DataTable.vue';
 
-defineProps({ properties: Object });
+defineProps({ properties: Array });
 </script>
