@@ -9,11 +9,11 @@
 
       <ElContainer class="page">
         <ElAside class="page__aside el-main">
-          <FiltersForm />
+          <FiltersForm @isLoading="changeIsLoading" />
         </ElAside>
 
         <ElMain>
-          <DataTable :properties="properties" />
+          <DataTable :properties="properties" :isLoading="isLoading" />
         </ElMain>
       </ElContainer>
     </ElContainer>
@@ -23,10 +23,21 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import { ElAside, ElContainer, ElHeader, ElMain } from 'element-plus';
+import { ref } from 'vue';
 import FiltersForm from './Filters/FiltersForm.vue';
 import DataTable from './Data/DataTable.vue';
 
-defineProps({ properties: Array });
+defineProps({
+  properties: {
+    type: Array,
+    required: true,
+  },
+});
+
+const isLoading = ref(false);
+function changeIsLoading(value) {
+  isLoading.value = Boolean(value);
+}
 </script>
 
 <style scoped lang="scss">
@@ -34,10 +45,12 @@ defineProps({ properties: Array });
   .page__aside {
     margin-right: -20px;
     min-width: 450px;
+    max-width: 450px;
 
     @media screen and (max-width: 1280px) {
       margin-right: 0px;
       min-width: 0px;
+      max-width: 100%;
     }
   }
 

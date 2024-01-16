@@ -4,32 +4,76 @@
       <div class="card-header">
         <h3>Filters</h3>
       </div>
+
+      <FiltersError :form="form" />
     </template>
 
     <ElForm label-position="left" label-width="100px">
       <ElFormItem label="Name">
-        <ElInput v-model="name" class="form__input" />
+        <ElInput v-model="form.name" class="form__input" />
       </ElFormItem>
+
       <ElFormItem label="Price">
-        <ElInputNumber v-model="price" controls-position="right" min="0" class="form__input form__input--number" />
+        <div class="form__price">
+          <ElInputNumber
+            v-model="form.price_min"
+            placeholder="min"
+            controls-position="right"
+            :min="0"
+            class="form__input form__input--price"
+          />
+          <ElInputNumber
+            v-model="form.price_max"
+            placeholder="max"
+            controls-position="right"
+            :min="0"
+            class="form__input form__input--price"
+          />
+        </div>
       </ElFormItem>
+
       <ElFormItem label="Bedrooms">
-        <ElInputNumber v-model="bedrooms" controls-position="right" min="0" class="form__input form__input--number" />
+        <ElInputNumber
+          v-model="form.bedrooms"
+          controls-position="right"
+          :min="0"
+          class="form__input form__input--number"
+        />
       </ElFormItem>
+
       <ElFormItem label="Bathrooms">
-        <ElInputNumber v-model="bathrooms" controls-position="right" min="0" class="form__input form__input--number" />
+        <ElInputNumber
+          v-model="form.bathrooms"
+          controls-position="right"
+          :min="0"
+          class="form__input form__input--number"
+        />
       </ElFormItem>
+
       <ElFormItem label="Storeys">
-        <ElInputNumber v-model="storeys" controls-position="right" min="0" class="form__input form__input--number" />
+        <ElInputNumber
+          v-model="form.storeys"
+          controls-position="right"
+          :min="0"
+          class="form__input form__input--number"
+        />
       </ElFormItem>
+
       <ElFormItem label="Garages">
-        <ElInputNumber v-model="garages" controls-position="right" min="0" class="form__input form__input--number" />
+        <ElInputNumber
+          v-model="form.garages"
+          controls-position="right"
+          :min="0"
+          class="form__input form__input--number"
+        />
       </ElFormItem>
     </ElForm>
 
     <template #footer>
       <div class="form__footer">
-        <ElButton type="primary" size="large" class="form__submit">Update</ElButton>
+        <ElButton type="primary" size="large" class="form__submit" @click.prevent="submit" :loading="form.processing">
+          Update
+        </ElButton>
       </div>
     </template>
   </ElCard>
@@ -37,31 +81,62 @@
 
 <script setup>
 import { ElButton, ElCard, ElForm, ElFormItem, ElInput, ElInputNumber } from 'element-plus';
-import { ref } from 'vue';
+import { router, useForm } from '@inertiajs/vue3';
+import FiltersError from './FiltersError.vue';
 
-const name = ref('');
-const price = ref();
-const bedrooms = ref();
-const bathrooms = ref();
-const storeys = ref();
-const garages = ref();
+const form = useForm({
+  name: null,
+  price_min: null,
+  price_max: null,
+  bedrooms: null,
+  bathrooms: null,
+  storeys: null,
+  garages: null,
+});
+
+const emit = defineEmits(['isLoading']);
+
+function submit() {
+  form.clearErrors();
+  emit('isLoading', true);
+
+  router.post(
+    '/',
+    { filters: form },
+    {
+      onFinish: () => emit('isLoading', false),
+      onError: (e) => form.setError(e),
+    }
+  );
+}
 </script>
 
 <style scoped lang="scss">
 .form {
-  .form__input {
+  .form {
+    &__input {
+      &--number {
+        width: 100%;
+      }
 
-    &--number {
-      width: 100%;
+      &--price {
+        flex-grow: 1;
+      }
     }
-  }
 
-  .form__footer {
-    display: flex;
-    justify-content: end;
+    &__price {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+    }
 
-    @media screen and (max-width: 1280px) {
-      justify-content: center;
+    &__footer {
+      display: flex;
+      justify-content: end;
+
+      @media screen and (max-width: 1280px) {
+        justify-content: center;
+      }
     }
   }
 }

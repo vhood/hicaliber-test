@@ -22,14 +22,13 @@ class PropertiesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'filters' => 'array:name,price_min,price_max,bedrooms,bathrooms,storeys,garages|filled',
-            'filters.name' => 'string|filled',
-            'filters.price_min' => 'int|filled',
-            'filters.price_max' => 'int|filled',
-            'filters.bedrooms' => 'int|filled',
-            'filters.bathrooms' => 'int|filled',
-            'filters.storeys' => 'int|filled',
-            'filters.garages' => 'int|filled',
+            'filters.name' => 'string|nullable',
+            'filters.price_min' => 'int|nullable',
+            'filters.price_max' => 'int|nullable',
+            'filters.bedrooms' => 'int|nullable',
+            'filters.bathrooms' => 'int|nullable',
+            'filters.storeys' => 'int|nullable',
+            'filters.garages' => 'int|nullable',
         ];
     }
 }

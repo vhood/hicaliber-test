@@ -37,20 +37,27 @@ class PropertyRepository
             ::table('properties')
             ->select(['name', 'price', 'bedrooms', 'bathrooms', 'storeys', 'garages']);
 
-        if ($request->has('filters.name')) {
-            /** @var string */
-            $name = $request->validated('filters.name');
+        /** @var array<string,int|string> */
+        $filters = $request->validated('filters');
 
-            $query->where('name', 'like', sprintf('%%%s%%', $name));
+        if (array_key_exists('name', $filters) && $filters['name'] !== null) {
+            /** @var string */
+            $name = $filters['name'];
+
+            $query->whereRaw('LOWER(name) LIKE ?', [sprintf('%%%s%%', strtolower($name))]);
         }
 
-        if ($request->has('filters.price_min') && $request->has('filters.price_max')) {
-            $query->whereBetween('price', [$request->validated('filters.price_min'), $request->validated('filters.price_max')]);
+        if (array_key_exists('price_min', $filters) && $filters['price_min'] !== null) {
+            $query->where('price', '>=', $filters['price_min']);
+        }
+
+        if (array_key_exists('price_max', $filters) && $filters['price_max'] !== null) {
+            $query->where('price', '<=', $filters['price_max']);
         }
 
         foreach (['bedrooms', 'bathrooms', 'storeys', 'garages'] as $filter) {
-            if ($request->has(sprintf('filters.%s', $filter))) {
-                $query->where($filter, '=', $request->validated(sprintf('filters.%s', $filter)));
+            if (array_key_exists($filter, $filters) && !empty($filters[sprintf('%s', $filter)])) {
+                $query->where($filter, '=', $filters[sprintf('%s', $filter)]);
             }
         }
 
