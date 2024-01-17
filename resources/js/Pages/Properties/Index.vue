@@ -4,7 +4,7 @@
   <div class="common-layout">
     <ElContainer>
       <ElHeader>
-        <h1 style="text-align: center">Properties</h1>
+        <h1 class="header">Properties</h1>
       </ElHeader>
 
       <ElContainer class="page">
@@ -41,6 +41,10 @@ function changeIsLoading(value) {
 </script>
 
 <style scoped lang="scss">
+.header {
+  text-align: center;
+}
+
 .page {
   .page__aside {
     margin-right: -20px;
